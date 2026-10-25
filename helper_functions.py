@@ -44,6 +44,7 @@ def jukes_cantor(reference_sequence: str, distant_sequence: str) -> float:
     
     d_site = - (3.0 / 4.0) * np.log(1.0 - (4.0 / 3.0) * p)
 
+    # return total corrected genetic distance
     return float(L * d_site)
 
 
