@@ -25,7 +25,7 @@ def jukes_cantor(reference_sequence: str, distant_sequence: str) -> float:
     dist = np.array(list(distant_sequence.upper()))
 
     # Ignore positions where sequence has an indel ('-' or '.')
-    valid = (ref != '-') & (dist != '-') & (ref != '.') & (dist != '.')
+    valid = (ref != '-') & (dist != '-') & (ref != '.') & (dist != '.') & (ref != 'N') & (dist != 'N')
 
     ref_valid = ref[valid]
     dist_valid = dist[valid]
