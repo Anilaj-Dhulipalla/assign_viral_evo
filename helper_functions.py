@@ -69,4 +69,42 @@ def kimura_two_parameter(reference_sequence: str, distant_sequence: str) -> floa
         For example 1.196.
 
     """
-    raise NotImplementedError()
+
+    ref = reference_sequence.upper()
+    dist = distant_sequence.upper()
+
+    transitions = {('A', 'G'), ('G', 'A'), ('C', 'T'), ('T', 'C')}
+
+    valid_comparisons = 0
+    p_count = 0
+    q_count = 0
+
+    for r_char, d_char in zip(ref, dist):
+        # Ignore gaps and ambigoys characters
+        if r_char in '-NX' or d_char in '-NX':
+            continue
+        if r_char == '.' or d_char == '.':
+            continue
+
+        valid_comparisons += 1
+        if r_char != d_char: 
+            if (r_char, d_char) in transitions:
+                p_count += 1
+            else:
+                q_count += 1
+
+    if valid_comparisons == 0:
+        return 0.0
+    
+    P = p_count / valid_comparisons
+    Q = q_count / valid_comparisons
+
+    term1 = 1.0 - 2.0 * P - Q
+    term2 = 1.0 - 2.0 * Q
+
+    if term1 <= 0 or term2 <= 0: 
+        # Fallback for highly saturated sequences
+        return float('inf')
+    
+    k2p_dist = -0.5 * np.log(term1) - 0.25 * np.log(term2)
+    return k2p_dist * valid_comparisons 
